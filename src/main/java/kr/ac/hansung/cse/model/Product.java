@@ -1,6 +1,8 @@
 package kr.ac.hansung.cse.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.math.BigDecimal;
 
 /**
@@ -21,9 +23,25 @@ import java.math.BigDecimal;
  * @Entity  : 이 클래스가 JPA 관리 대상(엔티티)임을 선언합니다.
  *            Hibernate가 이 클래스를 DB 테이블과 매핑합니다.
  * @Table   : 매핑할 DB 테이블 이름을 지정합니다. (생략 시 클래스 이름 사용)
+ *
+ * [Lombok 어노테이션 설명]
+ * @Getter  : 모든 필드의 getter 메서드를 자동 생성합니다.
+ * @Setter  : 모든 필드의 setter 메서드를 자동 생성합니다.
+ * @ToString: toString() 메서드를 자동 생성합니다.
+ *            exclude로 특정 필드를 제외할 수 있습니다.
+ * @NoArgsConstructor: 매개변수 없는 기본 생성자를 자동 생성합니다.
+ *            access = AccessLevel.PROTECTED: JPA 요구사항에 맞게
+ *            protected 접근 제한자를 사용합니다.
+ * @AllArgsConstructor: 모든 필드를 받는 생성자를 자동 생성합니다.
+ *            exclude로 id를 제외하면 일반 생성자는 직접 작성해야 하므로
+ *            여기서는 id를 포함한 전체 생성자를 생성합니다.
  */
 @Entity
 @Table(name = "product")
+@Getter
+@Setter
+@ToString(exclude = "description")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     /**
@@ -76,12 +94,6 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    // ─────────────────────────────────────────────────────────────────
-    // JPA 기본 요구사항: 매개변수 없는 기본 생성자 (접근 제한자: public 또는 protected)
-    // Hibernate가 DB에서 데이터를 읽어올 때 기본 생성자로 객체를 생성합니다.
-    // ─────────────────────────────────────────────────────────────────
-    protected Product() {}
-
     /**
      * 새 Product를 생성할 때 사용하는 생성자
      * id는 DB가 자동 생성하므로 포함하지 않습니다.
@@ -91,32 +103,5 @@ public class Product {
         this.category = category;
         this.price = price;
         this.description = description;
-    }
-
-    // ─────────────────────────────────────────────────────────────────
-    // Getter / Setter
-    // JPA 엔티티는 필드에 직접 접근하거나 getter/setter를 통해 접근합니다.
-    // Thymeleaf에서 th:text="${product.name}" 호출 시 getName()이 실행됩니다.
-    // ─────────────────────────────────────────────────────────────────
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    @Override
-    public String toString() {
-        return "Product{id=%d, name='%s', category='%s', price=%s}"
-                .formatted(id, name, category, price);
     }
 }

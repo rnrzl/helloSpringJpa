@@ -133,6 +133,19 @@
             <version>1.4.14</version>
         </dependency>
 
+        <!-- =================================================
+             10. Lombok
+             getter/setter/생성자/toString 등 반복 코드를
+             어노테이션으로 자동 생성합니다.
+             scope=provided: 컴파일 시에만 필요하며 런타임에는 불필요합니다.
+             ================================================= -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -149,7 +162,8 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Compiler 플러그인: Java 21 명시 -->
+            <!-- Maven Compiler 플러그인: Java 21 소스/바이트코드 호환성 설정
+                 시스템 JDK 버전과 무관하게 Java 21 문법/API만 사용하도록 제한합니다. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -164,6 +178,14 @@
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
+                    <!-- Lombok 어노테이션 프로세서 등록 -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.38</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>
