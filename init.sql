@@ -47,9 +47,6 @@ CREATE TABLE IF NOT EXISTS product (
     -- JPA의 @Column(nullable = false, length = 100)과 매핑
     name        VARCHAR(100)    NOT NULL,
 
-    -- 카테고리: NULL 허용
-    category    VARCHAR(50)     NULL,
-
     -- DECIMAL(10, 2): 전체 10자리, 소수점 2자리
     -- JPA의 @Column(precision = 10, scale = 2)와 매핑
     price       DECIMAL(10, 2)  NOT NULL DEFAULT 0.00,
@@ -64,39 +61,61 @@ CREATE TABLE IF NOT EXISTS product (
   DEFAULT CHARSET=utf8mb4    -- 한글 지원
   COLLATE=utf8mb4_unicode_ci;
 
+-- ① 카테고리 테이블 생성
+CREATE TABLE IF NOT EXISTS category (
+    id       BIGINT       NOT NULL AUTO_INCREMENT,
+    name     VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+-- ② product 테이블에 FK 컬럼 추가
+ALTER TABLE product
+    ADD COLUMN category_id BIGINT NULL,
+    ADD CONSTRAINT fk_product_category
+        FOREIGN KEY (category_id) REFERENCES category(id);
+
+
+-- ③ 샘플 카테고리 데이터
+INSERT INTO category (name) VALUES
+    ('전자제품'), ('도서'), ('스포츠'), ('식품'), ('의류');
+
 -- =====================================================================
 -- 샘플 데이터 삽입
 -- =====================================================================
 -- 애플리케이션 시작 시 테스트용 데이터를 미리 넣어둡니다.
 
-INSERT INTO product (name, category, price, description) VALUES
+-- category 테이블 INSERT 후 AUTO_INCREMENT로 부여된 id:
+--   1=전자제품, 2=도서, 3=스포츠, 4=식품, 5=의류
+INSERT INTO product (name, category_id, price, description) VALUES
 ('Apple MacBook Pro 14인치',
- '전자제품',
+ 1,
  2990000,
  'M3 Pro 칩 탑재, 18GB 유니파이드 메모리, 512GB SSD.\n전문가를 위한 고성능 노트북입니다.'),
 
 ('삼성 갤럭시 S24 Ultra',
- '전자제품',
+ 1,
  1550000,
  '200MP 카메라, AI 기반 사진 처리, S펜 내장.\n최신 안드로이드 플래그십 스마트폰입니다.'),
 
 ('스프링 부트 실전 활용 마스터',
- '도서',
+ 2,
  38000,
  '김영한 저. JPA, Spring Data, QueryDSL 등 실무 필수 기술을 다루는 베스트셀러입니다.'),
 
 ('나이키 에어맥스 270',
- '스포츠',
+ 3,
  149000,
  '270도 에어 쿠셔닝 시스템으로 최고의 편안함을 제공합니다.\n다양한 컬러로 출시되었습니다.'),
 
 ('비비고 왕교자 만두 1.2kg',
- '식품',
+ 4,
  12900,
  '속재료가 꽉 찬 프리미엄 교자 만두. 에어프라이어, 찜, 구이 모두 가능합니다.'),
 
 ('무신사 스탠다드 오버핏 맨투맨',
- '의류',
+ 5,
  39000,
  '면 100% 소재의 편안한 오버핏 맨투맨. 봄/가을 활용도 높은 베이직 아이템입니다.');
 
