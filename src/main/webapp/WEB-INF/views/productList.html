@@ -119,6 +119,10 @@
             </tr>
         </tbody>
     </table>
-
+    <hr>
+    <footer style="text-align:center; margin-top:40px; font-size:12px;">
+        <p th:text="${'실습 수행 일시: ' + #temporals.format(#temporals.createNow(), 'yyyy년 MM월 dd일 HH:mm:ss') + ' | 학번: 2171505 | 성명: 한국희'}">
+        </p>
+    </footer>
 </body>
 </html>
