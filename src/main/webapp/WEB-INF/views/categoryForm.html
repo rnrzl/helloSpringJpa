@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리 등록</title>
+</head>
+<body>
+<h1>카테고리 등록</h1>
+
+<form th:action="@{/categories/create}" th:object="${categoryForm}" method="post">
+    <input type="text" th:field="*{name}" placeholder="카테고리 이름"/>
+    <span th:errors="*{name}" style="color:red"></span>
+    <button type="submit">등록</button>
+</form>
+
+<a th:href="@{/categories}">목록으로</a>
+
+<footer>
+    <p th:text="${'실습 수행 일시: ' + #temporals.format(#temporals.createNow(), 'yyyy년 MM월 dd일 HH:mm:ss') + ' | 학번: 2171505 | 성명: 한국희'}"></p>
+</footer>
+</body>
+</html>
