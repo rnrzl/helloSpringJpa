@@ -28,4 +28,17 @@ public class CategoryService {
                 });
         return categoryRepository.save(new Category(name));
     }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        long count = categoryRepository.countProductsByCategoryId(id);
+
+        if (count > 0) {
+            throw new IllegalStateException(
+                    "상품 " + count + "개가 연결되어 있어 삭제할 수 없습니다."
+            );
+        }
+        categoryRepository.delete(id);
+    }
+
 }
