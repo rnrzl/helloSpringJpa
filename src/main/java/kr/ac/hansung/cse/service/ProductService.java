@@ -79,6 +79,16 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    // readOnly = true 상속: 검색은 읽기 전용 트랜잭션으로 충분
+    public List<Product> searchByName(String keyword) {
+        return productRepository.findByNameContaining(keyword);
+    }
+    public List<Product> searchByNameAndCategory(String keyword, Long categoryId) {
+        return productRepository.findByNameContainingAndCategoryId(keyword, categoryId);}
+    public List<Product> searchByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId); }
+
+
     /**
      * ID로 상품 조회
      * Optional을 그대로 반환하여 Controller가 null 처리를 명시적으로 하도록 강제합니다.
@@ -86,6 +96,7 @@ public class ProductService {
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
+
 
     /**
      * 새 상품 등록
